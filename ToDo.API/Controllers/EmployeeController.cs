@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using AutoMapper;
+using Serilog;
+using ToDo.API.ActionFilters;
 using ToDo.DataAccess.Interfaces;
 using ToDo.Entities.DTO;
 using ToDo.Entities.Models;
@@ -34,6 +36,7 @@ namespace ToDo.Web.Controllers
 
 
         [HttpGet("{id}", Name = "EmployeeById")]
+        [ServiceFilter(typeof(CheckEmployeeExistsAttribute))]
         public async Task<IActionResult> GetEmployee(int id)
         {
             var result = await _db.Employees.GetEmployeeAsync(id);
@@ -44,6 +47,7 @@ namespace ToDo.Web.Controllers
 
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<IActionResult> CreateEmployee([FromBody] EmployeeForManipulation employee)
         {
             var employeeForDb = _mapper.Map<Employee>(employee);
@@ -57,6 +61,7 @@ namespace ToDo.Web.Controllers
 
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<IActionResult> UpdateEmployee([FromBody] EmployeeForManipulation employee, int id)
         {
             var employeeForDb = await _db.Employees.GetEmployeeAsync(id);

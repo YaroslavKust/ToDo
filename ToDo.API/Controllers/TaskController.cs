@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using ToDo.API.ActionFilters;
 using ToDo.DataAccess.Interfaces;
 using ToDo.Entities.DTO;
 using ToDo.Entities.Models;
@@ -33,9 +34,10 @@ namespace ToDo.Web.Controllers
 
 
         [HttpGet("{id}", Name = "TaskById")]
-        public async Task<IActionResult> GetTask(int employeeId, int id)
+        [ServiceFilter(typeof(CheckTaskExistsAttribute))]
+        public IActionResult GetTask(int employeeId, int id)
         {
-            var task = await _db.Tasks.GetTaskAsync(employeeId, id);
+            var task = HttpContext.Items["Task"] as MyTask;
             var taskDto = _mapper.Map<TaskDto>(task);
 
             return Ok(taskDto);
@@ -43,6 +45,7 @@ namespace ToDo.Web.Controllers
 
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
         public async Task<IActionResult> CreateTask(int employeeId, [FromBody] TaskForCreate task)
         {
             var taskForDb = _mapper.Map<MyTask>(task);
@@ -58,9 +61,11 @@ namespace ToDo.Web.Controllers
 
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidateModelAttribute))]
+        [ServiceFilter(typeof(CheckTaskExistsAttribute))]
         public async Task<IActionResult> UpdateTask(int employeeId, int id, [FromBody] TaskForUpdate task)
         {
-            var taskForDb = await _db.Tasks.GetTaskAsync(employeeId, id);
+            var taskForDb = HttpContext.Items["Task"] as MyTask;
             _mapper.Map(task, taskForDb);
             _db.Tasks.Update(taskForDb);
             await _db.SaveAsync();
@@ -70,9 +75,10 @@ namespace ToDo.Web.Controllers
 
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(CheckTaskExistsAttribute))]
         public async Task<IActionResult> DeleteTask(int employeeId, int id)
         {
-            var deletedTask = await _db.Tasks.GetTaskAsync(employeeId, id);
+            var deletedTask = HttpContext.Items["Task"] as MyTask;
             _db.Tasks.Delete(deletedTask);
             await _db.SaveAsync();
 
