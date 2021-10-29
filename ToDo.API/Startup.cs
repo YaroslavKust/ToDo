@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using ToDo.API.ActionFilters;
 using ToDo.API.Extensions;
 using ToDo.DataAccess;
 using ToDo.DataAccess.Interfaces;
@@ -24,9 +26,16 @@ namespace ToDo.API
             services.AddControllers();
 
             services.ConfigureDataAccess(Configuration);
+            services.ConfigureSwagger();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddSingleton(Log.Logger);
+
+            services.AddScoped<CheckEmployeeExistsAttribute>();
+            services.AddScoped<CheckTaskExistsAttribute>();
+            services.AddScoped<ValidateModelAttribute>();
         }
 
 
@@ -40,6 +49,9 @@ namespace ToDo.API
             {
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("v1/swagger.json", "ToDo list API v1"));
 
             app.ConfigureExceptionsHandler();
 
