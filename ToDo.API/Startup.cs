@@ -27,6 +27,7 @@ namespace ToDo.API
 
             services.ConfigureDataAccess(Configuration);
             services.ConfigureSwagger();
+            services.ConfigureAuthentication(Configuration);
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(Startup));
@@ -57,26 +58,9 @@ namespace ToDo.API
 
             app.UseHttpsRedirection();
 
-            //app.UseStaticFiles();
-
-            //if (!env.IsDevelopment())
-            //{
-            //    app.UseSpaStaticFiles();
-            //}
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints=>endpoints.MapControllers());
-
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
-
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseAngularCliServer(npmScript: "start");
-            //    }
-            //});
         }
     }
 }

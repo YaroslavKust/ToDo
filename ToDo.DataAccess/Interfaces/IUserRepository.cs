@@ -3,7 +3,7 @@ using ToDo.Entities.Models;
 
 namespace ToDo.DataAccess.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository: IRepository<User>
     {
         Task<User> GetUserAsync(string login, string password);
     }
