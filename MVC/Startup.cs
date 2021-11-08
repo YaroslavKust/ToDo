@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MVC.Common;
+using System.Net.Http;
 
 namespace MVC
 {
@@ -23,6 +20,10 @@ namespace MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddSingleton<HttpClient>();
+            services.AddScoped<IApiConnector, DefaultConnector>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -50,7 +51,7 @@ namespace MVC
 
                 endpoints.MapControllerRoute(
                     name: "task",
-                    pattern: "Employees/Details/{id}/Tasks/{action}/{taskId?}",
+                    pattern: "Employees/Details/{employeeId}/Tasks/{action}/{id?}",
                     defaults: new { Controller = "Task", action = "Create" });
             });
         }
