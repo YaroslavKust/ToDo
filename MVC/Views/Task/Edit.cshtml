@@ -1,5 +1,23 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ToDo.Entities.DTO.TaskDto
 @{
 }
+<h1>Update Task</h1>
+<form method="post" id="edit_task">
+    <input type="hidden" value="@Model.EmployeeId" name="employeeId"/>
+    <input type="hidden" value="@Model.Id" name="id"/>
+    <textarea name="Description" form="edit_task">@Model.Description</textarea>
+    <select form="edit_task" name="Progress">
+        @for (int i = 0; i <= 100; i += 10)
+        {
+            if (i == Model.Progress)
+            {
+                <option value="@i" selected>@i</option>
+            }
+            else
+            {
+                <option value="@i">@i</option>
+            }
+        }
+    </select>
+    <input type="submit"/>
+</form>

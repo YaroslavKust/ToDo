@@ -3,4 +3,9 @@
 *@
 @{
 }
-create task
+<h1>Create Task</h1>
+<form method="post" id="create_task">
+    <input type="hidden" value="@ViewBag.EmployeeId" name="employeeId"/>
+    <textarea name="Description" form="create_task"></textarea>
+    <input type="submit"/>
+</form>
