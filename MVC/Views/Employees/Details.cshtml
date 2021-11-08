@@ -1,9 +1,28 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DetailsViewModel
 @{
+    ViewData["Title"] = "Сотрудники";
 }
-<h1>Details page</h1>
-<a asp-controller="Task" asp-action="Edit" asp-route-id="1">Task</a>
-<a asp-controller="Task" asp-action="Delete" asp-route-id="2">Delete task</a>
-<a asp-controller="Task" asp-action="Create">Create task</a>
+<h1>Сотрудник</h1>
+<h2>@Model.Employee.Name</h2>
+<h2>@Model.Employee.Speciality</h2>
+<h2>@Model.Employee.Age</h2>
+<h2>@Model.Employee.EmploymentDate</h2>
+<h3>Задачи</h3>
+<a href="~/Employees/Details/@Model.Employee.Id/Tasks">Создать</a>
+<table class="table-condensed">
+    <tr>
+        <td>Описание</td>
+        <td>Прогресс</td>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var task in Model.Tasks)
+    {
+<tr>
+    <td>@task.Description</td>
+    <td>@task.Progress</td>
+    <td><a href="~/Employees/Details/@Model.Employee.Id/Tasks/Edit/@task.Id">Изменить</a></td>
+    <td><a href="~/Employees/Details/@Model.Employee.Id/Tasks/Delete/@task.Id">Удалить</a></td>
+</tr>
+    }
+</table>

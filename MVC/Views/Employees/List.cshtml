@@ -1,10 +1,39 @@
-﻿@*
-
-*@
+﻿@using ToDo.Entities.RequestFeatures
+@model IEnumerable<ToDo.Entities.DTO.EmployeeDto>
 @{
-    string hi = "hi";
+    ViewData["Title"] = "Сотрудники";
 }
-<h1><a asp-controller="Employees" asp-action="Details" asp-route-id="1">@hi</a></h1>
-<h1><a asp-controller="Employees" asp-action="Edit" asp-route-id="2">edit</a></h1>
-<h1><a asp-controller="Employees" asp-action="Delete" asp-route-id="3">delete</a></h1>
-<h1><a asp-controller="Employees" asp-action="Create">create</a></h1>
+<a asp-action="Create">Создать</a>
+<form>
+    <input type="text" name="Name" />
+    <input type="text" name="Speciality" />
+    <input type="number" name="MinAge" />
+    <input type="number" name="MaxAge" />
+    <input type="date" name="MinEmploymentDate" />
+    <input type="date" name="MaxEmploymentDate" />
+    <input type="submit"/>
+</form>
+
+<table class="table-condensed">
+    <tr>
+        <td>Имя</td>
+        <td>Должность</td>
+        <td>Возраст</td>
+        <td>Дата принятия</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var employee in Model)
+    {
+        <tr>
+            <td>@employee.Name</td>
+            <td>@employee.Speciality</td>
+            <td>@employee.Age</td>
+            <td>@employee.EmploymentDate</td>
+            <td><a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id">Подробнее</a></td>
+            <td><a asp-action="Edit" asp-route-id="@employee.Id">Редактировать</a></td>
+            <td><a asp-action="Delete" asp-route-id="@employee.Id">Удалить</a></td>
+        </tr>
+    }
+</table>
