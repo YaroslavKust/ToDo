@@ -56,7 +56,7 @@ namespace ToDo.API
 
             app.ConfigureExceptionsHandler();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
